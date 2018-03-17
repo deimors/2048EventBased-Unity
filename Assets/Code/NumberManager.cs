@@ -11,10 +11,25 @@ namespace Assets.Code
 {
 	public class NumberManager : MonoBehaviour
 	{
-		private const float Velocity = 1000;
+		private const float Velocity = 2000;
 		private const float UpdateRate = 0.005f;
 		private static readonly Vector3 CenterOffset = new Vector3(-72 * 1.5f, 72 * 1.5f);
 		private readonly Dictionary<Position, GameObject> _numbers = new Dictionary<Position, GameObject>();
+
+		private readonly IReadOnlyDictionary<int, Color> _colors = new Dictionary<int, Color>
+		{
+			{ 2, new Color32(251, 248, 239, 255) },
+			{ 4, new Color32(236, 224, 200, 255) },
+			{ 8, new Color32(241, 176, 120, 255) },
+			{ 16, new Color32(233, 142, 77, 255) },
+			{ 32, new Color32(246, 124, 91, 255) },
+			{ 64, new Color32(233, 89, 55, 255) },
+			{ 128, new Color32(242, 216, 106, 255) },
+			{ 256, new Color32(242, 216, 106, 255) },
+			{ 512, new Color32(244, 193, 46, 255) },
+			{ 1024, new Color32(244, 193, 46, 255) },
+			{ 2048, new Color32(94, 218, 146, 255) }
+		};
 
 		private readonly Queue<NumberAddedEvent> _addedEvents = new Queue<NumberAddedEvent>(10);
 
@@ -53,10 +68,11 @@ namespace Assets.Code
 			SetNumberText(newNumber, numberAddedEvent.Number);
 		}
 
-		private static void SetNumberText(GameObject newNumber, int newNumberValue)
+		private void SetNumberText(GameObject newNumber, int newNumberValue)
 		{
 			var newText = newNumberValue.ToString();
 			var textComponent = newNumber.GetComponentInChildren<Text>();
+			var panel = newNumber.GetComponent<Image>();
 
 			textComponent.text = newText;
 
@@ -66,6 +82,8 @@ namespace Assets.Code
 				textComponent.fontSize = 30;
 			else if (newText.Length == 4)
 				textComponent.fontSize = 24;
+
+			panel.color = _colors[newNumberValue];
 		}
 
 		private async void OnNumberMoved(NumberMovedEvent numberMovedEvent)
