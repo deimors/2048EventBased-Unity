@@ -9,6 +9,7 @@ namespace Assets.Code
 		{
 			Container.Bind<IChooseNewNumber>().To<NumberChooser>().AsSingle();
 			Container.Bind<Game>().FromResolveGetter((IChooseNewNumber numberChooser) => new Game(4, numberChooser)).AsSingle();
+			Container.Bind<InputLock>().AsSingle();
 		}
 	}
 }

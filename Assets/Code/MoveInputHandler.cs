@@ -9,8 +9,14 @@ namespace Assets.Code
 		[Inject]
 		private Game Game { get; set; }
 
+		[Inject]
+		private InputLock InputLock { get; set; }
+
 		void Update()
 		{
+			if (InputLock.Lock)
+				return;
+
 			if (Input.GetKeyDown(KeyCode.UpArrow))
 				Game.Move(Direction.Up);
 
