@@ -35,11 +35,11 @@ namespace Assets.Code
 
 		private int _numbersMoving;
 
-		[SerializeField]
-		private GameObject _numberPrefab;
+		[SerializeField] private GameObject _numberPrefab;
 
-		[Inject]
-		private InputLock InputLock { get; set; }
+		[SerializeField] private RectTransform _numberContainer; 
+
+		[Inject] private InputLock InputLock { get; set; }
 
 		[Inject]
 		public void Initialize(Game game)
@@ -61,7 +61,7 @@ namespace Assets.Code
 		{
 			var newNumber = Instantiate(_numberPrefab);
 
-			newNumber.transform.SetParent(transform, false);
+			newNumber.transform.SetParent(_numberContainer, false);
 
 			AddNumber(newNumber, numberAddedEvent.Position);
 
