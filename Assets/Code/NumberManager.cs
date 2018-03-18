@@ -11,7 +11,7 @@ namespace Assets.Code
 {
 	public class NumberManager : MonoBehaviour
 	{
-		private const float Velocity = 2000;
+		private const float Velocity = 8000;
 		private const float UpdateRate = 0.005f;
 		private static readonly Vector3 CenterOffset = new Vector3(-72 * 1.5f, 72 * 1.5f);
 		private readonly Dictionary<Position, GameObject> _numbers = new Dictionary<Position, GameObject>();
@@ -141,16 +141,22 @@ namespace Assets.Code
 		private static async Task AnimateMoveNumber(GameObject number, Position originPosition, Position targetPosition)
 		{
 			var origin = PositionToVector3(originPosition);
-			var toTarget = PositionToVector3(targetPosition) - origin;
-			var distanceToTarget = toTarget.magnitude;
-			var increment = toTarget.normalized * Velocity * UpdateRate;
+			var target = PositionToVector3(targetPosition);
+
+			var toTarget = target - origin;
+
+			var incrementMagnitude = Velocity * UpdateRate;
+			var increment = toTarget.normalized * incrementMagnitude;
 
 			var rectTransform = number.GetComponent<RectTransform>();
-			while ((rectTransform.localPosition - origin).magnitude < distanceToTarget)
+
+			while ((rectTransform.localPosition - target).magnitude > incrementMagnitude)
 			{
 				rectTransform.localPosition += increment;
 				await Task.Delay(TimeSpan.FromSeconds(UpdateRate));
 			}
+
+			rectTransform.localPosition = target;
 		}
 
 		private void AddNumber(GameObject number, Position position)
