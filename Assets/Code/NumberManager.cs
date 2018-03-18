@@ -83,6 +83,9 @@ namespace Assets.Code
 			else if (newText.Length == 4)
 				textComponent.fontSize = 24;
 
+			if (newNumberValue > 4)
+				textComponent.color = Color.white;
+
 			panel.color = _colors[newNumberValue];
 		}
 
@@ -102,13 +105,15 @@ namespace Assets.Code
 
 			_numbersMoving--;
 			InputLock.Lock = _numbersMoving > 0;
-			ProcessAddedQueue();
+			await ProcessAddedQueue();
 		}
 
-		private void ProcessAddedQueue()
+		private async Task ProcessAddedQueue()
 		{
 			if (_numbersMoving == 0)
 			{
+				await Task.Delay(TimeSpan.FromSeconds(0.15f));
+
 				while (_addedEvents.Any())
 					AddNewNumber(_addedEvents.Dequeue());
 			}
